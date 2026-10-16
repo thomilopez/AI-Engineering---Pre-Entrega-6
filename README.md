@@ -281,15 +281,6 @@ Consulta Inicial: Realizar una auditoría técnica completa del clúster de prod
 ================================================================================
 FLUJO COMPLETADO CON ÉXITO
 ================================================================================
-```
 
----
 
-## 🏆 Criterios de Evaluación y Cumplimiento de Rúbrica
 
-| Criterio Evaluado | Peso | Implementación en este Repositorio | Archivo / Referencia |
-|---|---|---|---|
-| **Arquitectura del Grafo y Flujo (Supervisor)** | **35%** | `StateGraph(MultiAgentState)` jerárquico con nodo Supervisor que utiliza `with_structured_output(SupervisorRoute)` para delegación dinámica en aristas condicionales. | `graph.py`, `agents/supervisor.py` |
-| **Especialización de Agentes y Herramientas** | **25%** | 2 especialistas acotados (`research_agent` y `analyst_agent`) con herramientas reales (`query_cluster_metrics`, `calculate_availability_score`, `calculate_resource_stress_index`) decoradas con `@tool` y contratos Pydantic. | `agents/`, `tools.py` |
-| **Gestión de Estado y Validación** | **20%** | `MultiAgentState` hereda de `MessagesState`. Aislamiento de escritura por parcelas (`researcher_output`, `analyst_output`, `validation_output`). Validador determinístico para control de conflictos. | `state.py`, `agents/validator.py` |
-| **Documentación y Visualización** | **20%** | README exhaustivo con diagrama Mermaid del grafo, justificación de topología, instrucciones de ejecución y trazas paso a paso. | `README.md` |
