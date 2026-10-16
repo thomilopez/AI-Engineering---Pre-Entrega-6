@@ -1,4 +1,4 @@
-﻿"""Definición del estado compartido y modelos Pydantic de contratos de datos.
+"""Definición del estado compartido y modelos Pydantic de contratos de datos.
 
 Módulo 6: Sistemas Multi-Agente - Colaboración y Especialización
 Principios aplicados:
@@ -23,25 +23,25 @@ class ResearchArtifact(BaseModel):
 
     topic: str = Field(
         ...,
-        description=\"Tema, entidad o consulta técnica investigada.\"
+        description="Tema, entidad o consulta técnica investigada."
     )
     fuentes_consultadas: list[str] = Field(
         default_factory=list,
-        description=\"Lista de fuentes, repositorios o módulos consultados.\"
+        description="Lista de fuentes, repositorios o módulos consultados."
     )
     datos_extraidos: dict[str, str | int | float | list[str]] = Field(
         default_factory=dict,
-        description=\"Datos cuantitativos y cualitativos estructurados extraídos de las fuentes.\"
+        description="Datos cuantitativos y cualitativos estructurados extraídos de las fuentes."
     )
     resumen_investigacion: str = Field(
         ...,
-        description=\"Síntesis detallada de los hallazgos técnicos o comerciales.\"
+        description="Síntesis detallada de los hallazgos técnicos o comerciales."
     )
     confidence_score: float = Field(
         ...,
         ge=0.0,
         le=1.0,
-        description=\"Nivel de confianza en la información obtenida (entre 0.0 y 1.0).\"
+        description="Nivel de confianza en la información obtenida (entre 0.0 y 1.0)."
     )
 
 
@@ -50,26 +50,26 @@ class AnalysisArtifact(BaseModel):
 
     metrica_principal: str = Field(
         ...,
-        description=\"Métrica clave analizada (ej: 'Tasa de Disponibilidad', 'Crecimiento MoM', 'Índice de Latencia').\"
+        description="Métrica clave analizada (ej: 'Tasa de Disponibilidad', 'Crecimiento MoM', 'Índice de Latencia')."
     )
     resultado_calculo: float = Field(
         ...,
-        description=\"Resultado numérico calculado de forma determinística sobre los datos de investigación.\"
+        description="Resultado numérico calculado de forma determinística sobre los datos de investigación."
     )
-    evaluacion_riesgo: Literal[\"BAJO\", \"MEDIO\", \"ALTO\", \"CRITICO\"] = Field(
+    evaluacion_riesgo: Literal["BAJO", "MEDIO", "ALTO", "CRITICO"] = Field(
         ...,
-        description=\"Clasificación categórica del riesgo detectado.\"
+        description="Clasificación categórica del riesgo detectado."
     )
     conclusiones: list[str] = Field(
         ...,
         min_length=1,
-        description=\"Lista de conclusiones analíticas basadas estrictamente en la evidencia.\"
+        description="Lista de conclusiones analíticas basadas estrictamente en la evidencia."
     )
     confidence_score: float = Field(
         ...,
         ge=0.0,
         le=1.0,
-        description=\"Nivel de confianza en el análisis computado (entre 0.0 y 1.0).\"
+        description="Nivel de confianza en el análisis computado (entre 0.0 y 1.0)."
     )
 
 
@@ -78,19 +78,19 @@ class ValidationArtifact(BaseModel):
 
     valido: bool = Field(
         ...,
-        description=\"True si todos los artefactos cumplen las reglas de negocio y consistencia; False si hay conflicto.\"
+        description="True si todos los artefactos cumplen las reglas de negocio y consistencia; False si hay conflicto."
     )
     conflictos_detectados: list[str] = Field(
         default_factory=list,
-        description=\"Lista de discrepancias, valores fuera de rango o contradicciones detectadas.\"
+        description="Lista de discrepancias, valores fuera de rango o contradicciones detectadas."
     )
     requiere_escalacion_humana: bool = Field(
         default=False,
-        description=\"Indica si el conflicto es irresoluble y debe escalarse a supervisión humana.\"
+        description="Indica si el conflicto es irresoluble y debe escalarse a supervisión humana."
     )
     observaciones: str = Field(
         ...,
-        description=\"Detalle técnico del resultado de la verificación de calidad.\"
+        description="Detalle técnico del resultado de la verificación de calidad."
     )
 
 
@@ -98,7 +98,7 @@ class ValidationArtifact(BaseModel):
 # Esquema de Ruteo del Supervisor
 # ============================================================================
 
-SupervisorDecision = Literal[\"researcher\", \"analyst\", \"validator\", \"FINISH\"]
+SupervisorDecision = Literal["researcher", "analyst", "validator", "FINISH"]
 
 
 class SupervisorRoute(BaseModel):
@@ -106,11 +106,11 @@ class SupervisorRoute(BaseModel):
 
     next_agent: SupervisorDecision = Field(
         ...,
-        description=\"Próximo especialista al cual delegar ('researcher', 'analyst', 'validator') o 'FINISH' para finalizar.\"
+        description="Próximo especialista al cual delegar ('researcher', 'analyst', 'validator') o 'FINISH' para finalizar."
     )
     reasoning: str = Field(
         ...,
-        description=\"Justificación concisa de por qué se toma esta decisión de delegación o cierre.\"
+        description="Justificación concisa de por qué se toma esta decisión de delegación o cierre."
     )
 
 

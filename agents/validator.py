@@ -1,4 +1,4 @@
-﻿"""Puerta de Calidad: Validación Determinística y Detección de Conflictos.
+"""Puerta de Calidad: Validación Determinística y Detección de Conflictos.
 
 Principio: 'Pydantic, no vibras'.
 Verifica reglas estrictas con código Python determinístico:
@@ -15,56 +15,56 @@ from state import MultiAgentState, ValidationArtifact
 
 
 def deterministic_validator_node(state: MultiAgentState) -> dict[str, Any]:
-    \"\"\"Validador determinístico con aislamiento de escritura sobre 'validation_output'.\"\"\"
+    """Validador determinístico con aislamiento de escritura sobre 'validation_output'."""
     conflictos: list[str] = []
-    research = state.get(\"researcher_output\")
-    analysis = state.get(\"analyst_output\")
+    research = state.get("researcher_output")
+    analysis = state.get("analyst_output")
 
     # 1. Regla: Ambos artefactos deben estar presentes
     if not research:
-        conflictos.append(\"Falta el artefacto del Agente de Investigación (ResearchArtifact).\")
+        conflictos.append("Falta el artefacto del Agente de Investigación (ResearchArtifact).")
     if not analysis:
-        conflictos.append(\"Falta el artefacto del Agente de Análisis (AnalysisArtifact).\")
+        conflictos.append("Falta el artefacto del Agente de Análisis (AnalysisArtifact).")
 
     # 2. Validación cruzada de datos si ambos existen
     if research and analysis:
         # Validación de rango de confidence_score
         if not (0.0 <= research.confidence_score <= 1.0):
-            conflictos.append(f\"Confidence score de investigación fuera de rango: {research.confidence_score}\")
+            conflictos.append(f"Confidence score de investigación fuera de rango: {research.confidence_score}")
         if not (0.0 <= analysis.confidence_score <= 1.0):
-            conflictos.append(f\"Confidence score de análisis fuera de rango: {analysis.confidence_score}\")
+            conflictos.append(f"Confidence score de análisis fuera de rango: {analysis.confidence_score}")
 
         # Verificación de coherencia numérica
         datos = research.datos_extraidos or {}
-        total_req = float(datos.get(\"total_requests_hour\", 0))
-        error_req = float(datos.get(\"error_responses_hour\", 0))
+        total_req = float(datos.get("total_requests_hour", 0))
+        error_req = float(datos.get("error_responses_hour", 0))
 
         if total_req > 0:
             expected_avail = round(100.0 - (error_req / total_req * 100.0), 2)
             # Tolerancia de redondeo 0.5%
             if abs(analysis.resultado_calculo - expected_avail) > 0.5:
                 conflictos.append(
-                    f\"Incoherencia de cálculo: Análisis reportó {analysis.resultado_calculo}% \"
-                    f\"pero los datos de investigación indican {expected_avail}%.\"
+                    f"Incoherencia de cálculo: Análisis reportó {analysis.resultado_calculo}% "
+                    f"pero los datos de investigación indican {expected_avail}%."
                 )
 
         # Regla de coherencia de riesgo
-        cpu = float(datos.get(\"cpu_utilization_pct\", 0))
-        mem = float(datos.get(\"memory_utilization_pct\", 0))
-        if (cpu > 85 or mem > 85) and analysis.evaluacion_riesgo in (\"BAJO\", \"MEDIO\"):
+        cpu = float(datos.get("cpu_utilization_pct", 0))
+        mem = float(datos.get("memory_utilization_pct", 0))
+        if (cpu > 85 or mem > 85) and analysis.evaluacion_riesgo in ("BAJO", "MEDIO"):
             conflictos.append(
-                f\"Contradicción crítica: Saturación de recursos detectada (CPU: {cpu}%, Mem: {mem}%) \"
-                f\"pero la evaluación de riesgo fue clasificada optimistamente como '{analysis.evaluacion_riesgo}'.\"
+                f"Contradicción crítica: Saturación de recursos detectada (CPU: {cpu}%, Mem: {mem}%) "
+                f"pero la evaluación de riesgo fue clasificada optimistamente como '{analysis.evaluacion_riesgo}'."
             )
 
     valido = (len(conflictos) == 0)
     # Escalar a humano si hay contradicción grave en cálculo de riesgo
-    requiere_escalacion = any(\"Contradicción crítica\" in c for c in conflictos)
+    requiere_escalacion = any("Contradicción crítica" in c for c in conflictos)
 
     obs = (
-        \"Validación determinística exitosa: métricas, fórmulas y artefactos completamente coherentes.\"
+        "Validación determinística exitosa: métricas, fórmulas y artefactos completamente coherentes."
         if valido
-        else f\"Se detectaron {len(conflictos)} conflictos en la puerta de calidad.\"
+        else f"Se detectaron {len(conflictos)} conflictos en la puerta de calidad."
     )
 
     artifact = ValidationArtifact(
@@ -76,13 +76,13 @@ def deterministic_validator_node(state: MultiAgentState) -> dict[str, Any]:
 
     msg = AIMessage(
         content=(
-            f\"[ValidationGate]: Estado: {'APROBADO' if valido else 'RECHAZADO'}. \"
-            f\"Conflictos: {conflictos if conflictos else 'Ninguno'}. \"
-            f\"Escalación Humana: {requiere_escalacion}. Observaciones: {obs}\"
+            f"[ValidationGate]: Estado: {'APROBADO' if valido else 'RECHAZADO'}. "
+            f"Conflictos: {conflictos if conflictos else 'Ninguno'}. "
+            f"Escalación Humana: {requiere_escalacion}. Observaciones: {obs}"
         )
     )
 
     return {
-        \"messages\": [msg],
-        \"validation_output\": artifact,
+        "messages": [msg],
+        "validation_output": artifact,
     }
