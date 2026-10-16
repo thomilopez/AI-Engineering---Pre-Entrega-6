@@ -136,6 +136,7 @@ El validador aplica las siguientes reglas determinísticas:
 ├── .env.example             # Variables de entorno requeridas
 ├── .gitattributes           # Configuración de normalización de saltos de línea LF
 ├── .gitignore               # Exclusión de credenciales y archivos temporales
+├── demo_flujo.ipynb         # Notebook interactivo demostrando el flujo de delegación
 ├── graph.py                 # Construcción y compilación de StateGraph con nodos y condicionales
 ├── main.py                  # Script asíncrono (.astream) de ejecución del orquestador
 ├── multi_agent_trace.json   # Traza completa de la ejecución en formato JSON
