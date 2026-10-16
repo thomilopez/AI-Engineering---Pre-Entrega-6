@@ -18,7 +18,7 @@ Sistema multi-agente construido con **LangGraph**, **LangChain**, **Pydantic** y
 10. [Ejecución del Sistema](#ejecución-del-sistema)
 11. [Ejecución de Pruebas Unitarias](#ejecución-de-pruebas-unitarias)
 12. [Evidencia de la Traza de Ejecución](#evidencia-de-la-traza-de-ejecución)
-13. [Criterios de Evaluación y Cumplimiento de Rúbrica](#criterios-de-evaluación-y-cumplimiento-de-rúbrica)
+
 
 ---
 
